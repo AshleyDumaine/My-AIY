@@ -68,9 +68,14 @@ def process_event(event, assistant):
             aiy.audio.say("Now upgrading packages...")
             status = subprocess.call("sudo apt-get update && sudo apt-get upgrade -y", shell=True)
             if status == 0:
-                aiy.audio.say("Upgrading completed successfully.")
+                aiy.audio.say("Upgrade completed successfully.")
             else:
                 aiy.audio.say("Sorry but I could not complete the upgrade.")
+        elif "connect to the Bluetooth speaker" in text:
+            assistant.stop_conversation()
+            aiy.audio.say("Sure thing.")
+            subprocess.call("/bin/bash startup.sh", shell=True)
+            aiy.audio.say("Is this thing on?")
         elif text.startswith("play"):
             assistant.stop_conversation()
             playlist = text.replace("play","").strip()
