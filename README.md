@@ -4,7 +4,7 @@ My AIY
 The code I'm using on my Google AIY (most logic comes from 
 https://github.com/google/aiyprojects-raspbian/tree/voicekit)
 
-### What can it do?
+## What can it do?
 #### Regular Google Assistant stuff
 Personally I have fun using Google Assistant's [Easter eggs]
 (https://www.reddit.com/r/aiyprojects/comments/6ab6p5/some_of_the_aiy_easter_eggs/), 
@@ -28,7 +28,7 @@ Pretty basic, but useful for when I don't want to leave it running all day.
 So I can make sure everything's the latest and greatest. Eventually I'll
 probably have it update its own code too.
 
-### Dependencies
+## Dependencies
 For the music to work, you'll need to install gmusicapi with
 ```
 pip install gmusicapi
