@@ -39,15 +39,14 @@ sudo apt-get install vlc
 ```
 
 ## Known Issues + Workarounds
-TLD;DR: If you're using a Raspberry Pi 3, DO NOT use the built-in Bluetooth
-dongle!!
+#### Streaming music over Bluetooth
+TL;DR: If you're using a Raspberry Pi 3, DO NOT use the built-in Bluetooth!!
 
-Right now it seems the RasPi 3 has issues with Bluetooth connectivity, at least
-for the built-in dongle. Using it, I'm able to play music through my Bluetooth 
-speaker (although the sound quality isn't that great due to a [known issue with
-WiFI and Bluetooth compatibility on RasPi 3s]
-(https://github.com/raspberrypi/linux/issues/1402),
-but it cuts out eventually with the following in `journalctl -r`:
+Right now it seems the RasPi 3 has issues with the built-in Bluetooth. Using
+it, I was able to play music through my UE BOOM 2 speaker (although the sound
+quality wasn't that great due to a [known issue with WiFI and Bluetooth
+compatibility on RasPi 3s](https://github.com/raspberrypi/linux/issues/1402),
+but it cut out eventually with the following in `journalctl -r`:
 ```
 Nov 05 19:50:54 google-aiy kernel: Bluetooth: hci0 link tx timeout
 <working fine for the stream besides a few skipped microseconds>
@@ -56,6 +55,12 @@ It seems it's not an uncommon issue for others as well:
 https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=166564.
 My workaround was to use an external Bluetooth dongle ([this]
 (https://www.amazon.com/gp/product/B009ZIILLI/ref=oh_aui_search_detailpage?ie=UTF8&psc=1)
-is the one I'm using.) This completely resolved the stream quality AND made it
-so the connection would stop randomly dying.
+is the one I'm using) and to add the following line to the Pi's
+`/boot/config.txt`:
+```
+dtoverlay=pi3-disable-bt
+```
+This completely resolved the stream quality AND made it so the connection would
+stop randomly dying. Now the music will keep playing until I tell my AIY to stop
+the stream.
 
