@@ -11,7 +11,7 @@ Personally I have fun using Google Assistant's [Easter eggs]
 but it can do basic Google Assistant things like conversions, setting timers, etc. 
 
 #### Music
-I wanted to integrate with Google Music and hook this up to my BlueTooth speaker
+I wanted to integrate with Google Music and hook this up to my Bluetooth speaker
 to play songs with voice commands but alas, the assistant does not seem to have
 Google Music functionality built-in. Oddly it says the functionality is
 supported when asking it to "play some music", but it gets confused when asked
@@ -45,7 +45,7 @@ TL;DR: If you're using a Raspberry Pi 3, DO NOT use the built-in Bluetooth!!
 Right now it seems the RasPi 3 has issues with the built-in Bluetooth. Using
 it, I was able to play music through my UE BOOM 2 speaker (although the sound
 quality wasn't that great due to a [known issue with WiFI and Bluetooth
-compatibility on RasPi 3s](https://github.com/raspberrypi/linux/issues/1402),
+compatibility on RasPi 3s](https://github.com/raspberrypi/linux/issues/1402)),
 but it cut out eventually with the following in `journalctl -r`:
 ```
 Nov 05 19:50:54 google-aiy kernel: Bluetooth: hci0 link tx timeout
