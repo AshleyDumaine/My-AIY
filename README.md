@@ -5,15 +5,16 @@ The code I'm using on my Google AIY (most logic comes from
 https://github.com/google/aiyprojects-raspbian/tree/voicekit)
 
 ## What can it do?
-#### Regular Google Assistant stuff
+#### Regular Google Assistant stuff (Minus stuff that needs Google Home integration)
 Personally I have fun using Google Assistant's [Easter eggs]
 (https://www.reddit.com/r/aiyprojects/comments/6ab6p5/some_of_the_aiy_easter_eggs/), 
 but it can do basic Google Assistant things like conversions, setting timers, etc. 
+It can't play Music though the Assistant, sadly (more on that below).
 
 #### Music
 I wanted to integrate with Google Music and hook this up to my Bluetooth speaker
-to play songs with voice commands but alas, the assistant does not seem to have
-Google Music functionality built-in. Oddly it says the functionality is
+to play songs with voice commands but alas, the Assistant does not seem to have
+Google Music functionality built-in. Instead it says the functionality is
 supported when asking it to "play some music", but it gets confused when asked
 to play a genre, album, song, etc. I used [this repo]
 (https://github.com/Tom-Archer/gmusicaiy) to help get around
@@ -39,7 +40,7 @@ sudo apt-get install vlc
 ```
 
 ## Known Issues + Workarounds
-#### Streaming music over Bluetooth
+#### Music: Streaming music over Bluetooth
 TL;DR: If you're using a Raspberry Pi 3, DO NOT use the built-in Bluetooth!!
 
 Right now it seems the RasPi 3 has issues with the built-in Bluetooth. Using
@@ -64,3 +65,22 @@ This completely resolved the stream quality AND made it so the connection would
 stop randomly dying. Now the music will keep playing until I tell my AIY to stop
 the stream.
 
+#### Music: PulseAudio is way too loud
+On the Raspberry Pi 3, BlueZ is used as the Bluetooth stack.
+However, BlueZ >= v5.0 doesn’t support ALSA, but PulseAudio does and BlueZ 
+supports PulseAudio >= v5.0, resulting in the following :
+BlueZ → PulseAudio → ALSA
+
+Before you accidentally blow out your speaker after starting PulseAudio, I
+*highly* recommend you change the following under `Element PCM` in
+`/usr/share/pulseaudio/alsa-mixer/paths/analog-output.conf.common` from this:
+```
+volume = merge
+```
+To this:
+```
+volume = ignore
+volume-limit = 0.005
+```
+I'm not sure why, but it is otherwise **EXTEREMELY LOUD** if you do not do this
+and you plan on connecting a Bluetooth device.
