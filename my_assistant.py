@@ -76,18 +76,44 @@ def process_event(event, assistant):
             aiy.audio.say("Sure thing.")
             subprocess.call("/bin/bash startup.sh", shell=True)
             aiy.audio.say("Is this thing on?")
-        elif text.startswith("play"):
-            assistant.stop_conversation()
-            playlist = text.replace("play","").strip()
-            if player.load_playlist(playlist) is not None:
-                aiy.audio.say("Playing " + playlist)
-                player.start_playlist()
         elif text == "stop the music":
             assistant.stop_conversation()
             if player.playing:
                 player.stop()
             else:
                 aiy.audio.say("There is no music playing.")
+        elif text == "pause the music":
+            assistant.stop_conversation()
+            if player.playing:
+                player.toggle_pause()
+            else:
+                aiy.audio.say("There is no music playing.")
+        elif text == "resume playback":
+            assistant.stop_conversation()
+            if player.playing:
+                player.toggle_pause()
+            else:
+                aiy.audio.say("There is no music playing.")
+        elif "next song" in text:
+            assistant.stop_conversation()
+            if player.playing:
+                player.next()
+            else:
+                aiy.audio.say("There is no music playing.")
+        elif "last song" in text:
+            assistant.stop_conversation()
+            if player.playing:
+                player.previous()
+            else:
+                aiy.audio.say("There is no music playing.")
+        # Strategically check if starts with play last in case
+        # we want to play the next or last song
+        elif text.lower().startswith("play"):
+            assistant.stop_conversation()
+            playlist = text.lower().replace("play","",1).strip()
+            if player.load_playlist(playlist) is not None:
+                aiy.audio.say("Playing " + playlist)
+                player.start_playlist()
         status_ui.status('ready')
 
     elif event.type == EventType.ON_CONVERSATION_TURN_FINISHED:
