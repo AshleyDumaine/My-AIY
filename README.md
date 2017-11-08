@@ -11,15 +11,15 @@ Personally I have fun using Google Assistant's [Easter eggs]
 but it can do basic Google Assistant things like conversions, setting timers, etc. 
 It can't play Music though the Assistant, sadly (more on that below).
 
-#### Music
+#### Music (from your Google Music library only)
 I wanted to integrate with Google Music and hook this up to my Bluetooth speaker
 to play songs with voice commands but alas, the Assistant does not seem to have
 Google Music functionality built-in. Instead it says the functionality is
 supported when asking it to "play some music", but it gets confused when asked
 to play a genre, album, song, etc. I used [this repo]
-(https://github.com/Tom-Archer/gmusicaiy) to help get around
-the issue somewhat, but it only supports playlists on your account as opposed to
-genres, albums, or specific songs. The repo documentation is slightly out of
+(https://github.com/Tom-Archer/gmusicaiy) to start and added my own tweaks for
+more music stream control and support for playing individual songs from a Google
+Music library. As a note, the repo documentation is slightly out of
 date now that `actor.add_keyword` is deprecated in the AIY code.
 
 #### Voice shutdown
