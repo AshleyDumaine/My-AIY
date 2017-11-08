@@ -14,8 +14,11 @@ class Player(object):
         self.thread_running = False
         self.player = self.vlc.media_player_new()
         self.track_index = -1
-        
         self.api.login(email, password, device_id)
+
+    def load_song(self, name):
+        name = name.strip().lower()
+        print("Looking for song: ", name)
         if os.path.isfile("songs.json"):
             # Load from file
             print("Found songs data.")
@@ -26,10 +29,20 @@ class Player(object):
             # Save to file
             with open('songs.json', 'w') as output_file:
                 json.dump(self.song_library, output_file)    
-        
+
+        for song_dict in self.song_library:
+            song_name = song_dict['title'].strip().lower()
+            if (song_name == name) or (name in song_name):
+                print("Found match: ", song_dict['title'])
+                self.loaded_tracks.append(song_dict)
+                return song_dict['title']
+            else:
+                print("Song not found :(")
+        return None
+
     def load_playlist(self, name):
         name = name.strip().lower()
-        print("Looking for...", name)
+        print("Looking for playlist: ", name)
         if os.path.isfile("playlists.json"):
             # Load from file
             print("Found playlist data.")
@@ -72,18 +85,22 @@ class Player(object):
                 event_manager.event_attach(EventType.MediaPlayerEndReached, self.end_callback, 1)
   
     def play_song(self, song_dict):
-        stream_url = self.api.get_stream_url(song_dict['trackId'])
+        stream_url = ""
+        if 'trackId' in song_dict:
+          stream_url = self.api.get_stream_url(song_dict['trackId'])
+        else:
+          stream_url = self.api.get_stream_url(song_dict['nid'])
         media = self.vlc.media_new(stream_url)
         self.player.set_media(media)
         self.player.play()
 
         song_string = ""
-        if (song_dict['source'] == '2'):
-            song_string = self.get_song_details(song_dict)
+        # for playlists there are track dictionaries
+        if 'track' in song_dict:
+            song_string = song_dict['track']['artist'] + " - " + song_dict['track']['title']
         else:
-            song_string = self.get_local_song_details(song_dict['trackId'])
-
-        print("Playing...",song_string)
+            song_string = song_dict['artist'] + " - " + song_dict['title']
+        print("Playing ", song_string)
         
         self.playing = True
 
@@ -108,11 +125,3 @@ class Player(object):
             if self.track_index > 0:
                 self.track_index -= 1
                 self.play_song(self.loaded_tracks[self.track_index])
-
-    def get_local_song_details(self, track_id):
-        for song_dict in self.song_library:
-            if track_id == song_dict['id']:
-                return song_dict['albumArtist']+" - "+song_dict['title']
-
-    def get_song_details(self, song_dict):
-        return song_dict['track']['albumArtist']+" - "+song_dict['track']['title']

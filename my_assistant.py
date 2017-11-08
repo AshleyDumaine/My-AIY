@@ -110,9 +110,10 @@ def process_event(event, assistant):
         # we want to play the next or last song
         elif text.lower().startswith("play"):
             assistant.stop_conversation()
-            playlist = text.lower().replace("play","",1).strip()
-            if player.load_playlist(playlist) is not None:
-                aiy.audio.say("Playing " + playlist)
+            media = text.lower().replace("play","",1).strip()
+            # Below works for both individual songs and playlists
+            if player.load_playlist(media) is not None or player.load_song(media) is not None:
+                aiy.audio.say("Playing " + media)
                 player.start_playlist()
         status_ui.status('ready')
 
